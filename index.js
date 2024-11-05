@@ -85,7 +85,7 @@ app.delete("/persons/:id" , (req, res)=>{
     persons = persons.filter(person => person.id !== id)
     res.status(204).end();
 })
-app.post("/api/persons",(req, res)=>{
+app.post("/persons",(req, res)=>{
     console.log(req.body)
     const id = persons.length > 0 ? Math.max(...persons.map(person => person.id)) + 1 : 1;
     const {name, number} = req.body;
