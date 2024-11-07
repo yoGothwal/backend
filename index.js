@@ -81,9 +81,12 @@ app.get("/persons/:id", (req, res)=>{
     }
 })
 app.delete("/persons/:id" , (req, res)=>{
-    const id = req.params.id;
-    persons = persons.filter(person => person.id !== id)
-    res.status(204).end();
+    console.log("DELETE req made")
+    const id = parseInt(req.params.id);
+    console.log("befor :", persons)
+    persons = persons.filter(person => person.id !== id);
+    console.log("after :", persons)
+    res.status(204).end()
 })
 app.post("/persons",(req, res)=>{
     console.log(req.body)
