@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
@@ -10,31 +10,15 @@ app.use(express.json())
 // const morgan = require('morgan');
 // app.use(morgan('combined'));
 
-const x = {name: "Yogendra", age : 24}
-y = JSON.stringify(x, ["name"],2)
+// app.use(express.static('dist'))
+
+const x = {Author: "Yogendra", age : 24}
+y = JSON.stringify(x, ["Author"],2)
 console.log(y)
 
 let persons = [
-    { 
-      "id": "1",
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": "2",
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": "3",
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": "4",
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
+    { id: 1, name: 'John Doe', number: '123456789' },
+    { id: 2, name: 'Jane Doe', number: '987654321' }
 ]
 let notes = [
 ];
@@ -47,6 +31,7 @@ app.post("/notes",(req, res)=>{
     res.json(note)
 })
 app.delete("/notes/:id", (req, res)=>{
+    console.log("deleteNote req")
     const id = req.params.id;
     notes = notes.filter(note => note.id !== id);
     res.status(204).end()
