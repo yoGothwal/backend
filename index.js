@@ -1,107 +1,148 @@
-const express = require('express')
+const express = require('express');
+const mongoose = require('mongoose');
+require('dotenv').config();
+const password = process.env.DB_PASSWORD;
+
 const app = express();
-const PORT = 3001
+const PORT = process.env.NODE_ENV === 'production' ? 3001 : 5000; // Development port 5000
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
-const cors = require('cors')
-app.use(cors())
-app.use(express.json())
-// const morgan = require('morgan');
-// app.use(morgan('combined'));
-
-const x = {name: "Yogendra", age : 24}
-y = JSON.stringify(x, ["name"],2)
-console.log(y)
-
-let persons = [
-    { 
-      "id": "1",
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": "2",
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": "3",
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": "4",
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
-let notes = [
-];
-app.get('/notes', (req, res) => {
-    res.json(notes);
+  console.log(`Server running on port ${PORT}`);
 });
-app.post("/notes",(req, res)=>{
-    const note = req.body
-    notes = notes.concat(note);
-    res.json(note)
-})
-app.delete("/notes/:id", (req, res)=>{
+
+const cors = require('cors');
+app.use(cors());
+app.use(express.json());
+
+// MongoDB connection URL
+const url = `mongodb+srv://gothwalyoge:${password}@cluster1.7euci.mongodb.net/imp4?retryWrites=true&w=majority&appName=Cluster1`;
+mongoose.connect(url).then(() => {
+  console.log("connected to MongoDB Atlas");
+}).catch(err => {
+  console.log('Connection Error:', err);
+});
+
+const noteSchema = new mongoose.Schema({
+  content: String,
+  important: Boolean,
+});
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String,
+});
+
+const Person = mongoose.model('Person', personSchema);
+const Note = mongoose.model('Note', noteSchema);
+
+// Delete all notes and persons (if needed)
+const deleteAll = async () => {
+  try {
+    await Note.deleteMany({});
+    await Person.deleteMany({});
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// API routes
+
+// Get all notes
+app.get('/notes', async (req, res) => {
+  const notes = await Note.find({});
+  res.json(notes);
+});
+
+// Create a new note
+app.post("/notes", async (req, res) => {
+  const note = new Note(req.body);
+  const savedNote = await note.save();
+  res.json(savedNote);
+});
+
+// Delete a note by id
+app.delete("/notes/:id", async (req, res) => {
     const id = req.params.id;
-    notes = notes.filter(note => note.id !== id);
-    res.status(204).end()
-})
-
-
-
-app.get("/info", (req, res)=>{
-    const requestTime = new Date().toLocaleString();
-    const entryCount = persons.length
-    res.json({
-        message: `Phone bookhas ${entryCount} people`,
-        time: requestTime
-    })
-    // res.send(
-    //     `<div>
-    //         <p>Phonebook has info for ${entryCount} people</p>
-    //         <p>Request received at: ${requestTime}</p>
-    //     </div>`
-    // )
-})
-app.get("/persons",(req, res)=>{
-    res.json(persons);
-})
-app.get("/persons/:id", (req, res)=>{
-    const id = req.params.id;
-    const person = persons.find(person=> person.id === id);
-    if(person){
-        res.json(person)
-    }else{
-        res.status(404).json({error: `person not found with id ${id}`})
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid ObjectId format" });
     }
-})
-app.delete("/persons/:id" , (req, res)=>{
-    const id = req.params.id;
-    persons = persons.filter(person => person.id !== id)
-    res.status(204).end();
-})
-app.post("/api/persons",(req, res)=>{
-    console.log(req.body)
-    const id = persons.length > 0 ? Math.max(...persons.map(person => person.id)) + 1 : 1;
-    const {name, number} = req.body;
-    if (!name || !number) {
-        return res.status(400).json({ error: "Name and number are required" });
+    try {
+      const deletedNote = await Note.findByIdAndDelete(id);
+      if (deletedNote) {
+        res.status(204).end();
+      } else {
+        res.status(404).json({ error: `Note not found with id ${id}` });
+      }
+    } catch (error) {
+      console.error("Error deleting note:", error);
+      res.status(500).json({ error: "An error occurred while deleting the note" });
     }
-    if(persons.some(p => p.number === number || p.name === name)){
-        return res.status(400).json({ error: "Name or number are already taken" });
-    }
-    const person = {id, name, number}
-    persons = persons.concat(person);
-    res.json(person)
-})
+  });
 
-const unknownEndpoint = (request, response) => {
-    response.status(404).send({ error: 'unknown endpoint' })
+// Get information about the phone book (person count)
+app.get("/info", async (req, res) => {
+  const requestTime = new Date().toLocaleString();
+  const entryCount = await Person.countDocuments({});
+  res.json({
+    message: `Phone book has ${entryCount} people`,
+    time: requestTime
+  });
+});
+
+// Get all persons
+app.get("/persons", async (req, res) => {
+  const persons = await Person.find({});
+  res.json(persons);
+});
+
+// Get a person by id
+app.get("/persons/:id", async (req, res) => {
+  const id = req.params.id;
+  const person = await Person.findById(id);
+  if (person) {
+    res.json(person);
+  } else {
+    res.status(404).json({ error: `Person not found with id ${id}` });
+  }
+});
+
+// Delete a person by id
+app.delete("/persons/:id", async (req, res) => {
+    console.log("del r")
+  const id = req.params.id; // MongoDB ObjectId
+  try {
+    const deletedPerson = await Person.findByIdAndDelete(id);
+    if (deletedPerson) {
+      res.status(204).end();
+    } else {
+      res.status(404).json({ error: `Person not found with id ${id}` });
+    }
+  } catch (error) {
+    console.error("Error deleting person:", error);
+    res.status(400).json({ error: "Invalid ID format" });
+  }
+});
+
+// Create a new person
+app.post("/persons", async (req, res) => {
+  const { name, number } = req.body;
+  if (!name || !number) {
+    return res.status(400).json({ error: "Name and number are required" });
   }
 
-app.use(unknownEndpoint)
+  // Check if name or number already exists
+  const existingPerson = await Person.findOne({ $or: [{ name }, { number }] });
+  if (existingPerson) {
+    return res.status(400).json({ error: "Name or number already taken" });
+  }
+
+  const person = new Person({ name, number });
+  const savedPerson = await person.save();
+  res.json(savedPerson);
+});
+
+// Handle unknown endpoints
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' });
+};
+
+app.use(unknownEndpoint);
