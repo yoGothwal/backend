@@ -9,12 +9,12 @@ const personSchema = new mongoose.Schema({
   number: {
     type: String,
     required: true,
-    validate:{
-      validator: function (v){
-        return /^\d{2,3}-\d{5,}$/.test(v)
-      },
-      message: props => `${props.value} is not a valid phone number! Format should be XX-YYYYYYY or XXX-YYYYYYY`
-    }
+    // validate:{
+    //   validator: function (v){
+    //     return /^\d{2,3}-\d{5,}$/.test(v)
+    //   },
+    //   message: props => `${props.value} is not a valid phone number! Format should be XX-YYYYYYY or XXX-YYYYYYY`
+    // }
 
     // code: {
     //   type: String,

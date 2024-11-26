@@ -1,0 +1,143 @@
+### Post a user
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+    "username": "yogi",
+    "name": "Yogendra Gothwal",
+    "password": "1234"
+}
+###
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+    "username": "goty2",
+    "password":"1234"
+
+}
+### Get all blogs
+GET http://localhost:5000/blogs
+### Get all users
+GET http://localhost:5000/users
+
+### Add a new note
+POST http://localhost:5000/notes
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdvdHkyIiwiaWQiOiI2NzQ0MjdiMjE1ZWMyZjYyMWMxMmZhNTEiLCJpYXQiOjE3MzI1MTk5MjMsImV4cCI6MTczMjczNTkyM30.QlmHG-TRVJIRC-bUPs50iD_QOocycoU9ps_jRzEI8xo
+
+{
+  "content": "contnt 3",
+  "important": false
+}
+
+### Get all notes
+GET http://localhost:5000/notes
+
+### Get single personn
+GET http://localhost:5000/notes/1
+### Get single personn
+GET http://localhost:5000/notes/60000e5ea5fa61dd472e24fb
+
+###delete a note
+DELETE http://localhost:5000/notes/673986b739293db3587d0309
+
+
+### Get all users
+GET http://localhost:5000/users
+### Get all users
+GET http://localhost:5000/users
+
+### Get single
+GET http://localhost:5000/users/674013c29829d95bffea2bc4
+
+
+### update username of a particular user
+PUT http://localhost:5000/users/6739ef1b8551bcaab9eaacd6
+Content-Type: application/json
+
+{
+    "username": "gothwalbhai",
+    "name": "Yogend",
+    "password": "5678"
+}
+
+### delete a user
+DELETE http://localhost:5000/users/674049c5c894bff0bd22eef2
+
+###PUT note
+PUT http://localhost:5000/notes/67312809c3fe6e7b0a3dffb9
+Content-Type: application/json
+
+{
+  "content": "Updatid content here",
+  "important": true
+}
+
+
+
+
+
+
+
+
+### Get single blogs
+GET http://localhost:5000/blogs/673943a1484b1a865717dd77
+
+### Post a blog
+POST http://localhost:5000/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvaGl0IiwiaWQiOiI2NzQwMzM5YzBmNjc3YjQ5ZmIyY2U2NDQiLCJpYXQiOjE3MzIyNjA4NTAsImV4cCI6MTczMjI2NDQ1MH0.CU9BouNwEG8Yed91jD9dFfmp8qUSFHPkBlVfJkOaG8o
+
+{
+    "title": "How to learn dance in 2 min",
+    "author": "Karlos",
+    "url": "https://www.did/ajit",
+    "likes": "560",
+    "User": "12345"
+}
+### DELETE single blog
+DELETE http://localhost:5000/blogs/6740294d250369250dca8265
+
+###PUT blog
+PUT http://localhost:5000/blogs/67344f8d152301e0cd982f2d
+Content-Type: application/json
+
+{
+    "title": "How to make fish in 10 min",
+    "author": "Chef Ajit",
+    "url": "https://www.chef4you/ajit",
+    "likes": 560
+}
+
+
+
+
+
+
+
+
+### Get all persons
+GET http://localhost:5000/persons
+
+### Get single person
+GET http://localhost:5000/persons/60000e5ea5fa61dd472e24fb
+### Get single person
+GET http://localhost:5000/persons/1
+
+
+### Add a new person
+POST http://localhost:5000/persons
+Content-Type: application/json
+
+{
+    "name": "R",
+    "number": "70"
+}
+
+
+### DELETE single personn
+DELETE http://localhost:5000/persons/1
+
+
+
