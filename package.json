@@ -5,7 +5,6 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
-    
     "lint": "eslint .",
     "test": "jest --verbose"
   },
@@ -13,7 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
@@ -32,7 +31,6 @@
     "supertest": "^7.0.0"
   },
   "jest": {
-      "testEnvironment": "node"
+    "testEnvironment": "node"
   }
-
 }
