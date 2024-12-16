@@ -1,11 +1,11 @@
 const bcrypt = require('bcryptjs')
 const usersRouter = require('express').Router()
-const notesRouter = require('express').Router()
 const User = require('../models/user')
 const Note = require('../models/note')
 
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
+  console.log(name, username, password)
   if (!username || !password) {
     return response.status(400).json({ error: 'Username and password are required.' });
   }
@@ -22,43 +22,43 @@ usersRouter.post('/', async (request, response) => {
   })
 
   const savedUser = await user.save()
-
+  console.log("saved user", savedUser)
   response.status(201).json(savedUser)
 })
 
-usersRouter.get('/', async(request, response)=>{
+usersRouter.get('/', async (request, response) => {
   const usersList = await User.find({})
-  .populate('notes')
-  .populate('blogs');
-  if(usersList){
+    .populate('notes')
+    .populate('blogs');
+  if (usersList) {
     response.json(usersList)
   }
-  else{
-    response.status(404).json({error: 'not found'})
+  else {
+    response.status(404).json({ error: 'not found' })
   }
 })
-usersRouter.get('/:id', async(request, response)=>{
+usersRouter.get('/:id', async (request, response) => {
   const user = await User.findById(request.params.id)
-  if(user){
+  if (user) {
     response.json(user)
   }
-  else{
-    response.status(404).json({error: 'not found'})
+  else {
+    response.status(404).json({ error: 'not found' })
   }
 })
-usersRouter.delete('/:id', async(request, response)=>{
+usersRouter.delete('/:id', async (request, response) => {
   const user = await User.findById(request.params.id)
-  if(!user){
-    return response.status(404).json({error: `user not found`})
+  if (!user) {
+    return response.status(404).json({ error: `user not found` })
   }
-  
-  await Note.deleteMany({_id: {$in : user.notes}})
-  
+
+  await Note.deleteMany({ _id: { $in: user.notes } })
+
   await User.findByIdAndDelete(request.params.id)
   response.status(204).end()
 })
 
-usersRouter.put('/:id', async(request, response)=>{
+usersRouter.put('/:id', async (request, response) => {
   console.log("put req")
   const id = request.params.id
   const newUser = request.body

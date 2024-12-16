@@ -7,7 +7,7 @@ const config = require('../utilis/config')
 const Note = require('../models/note')
 const helper = require('./helper_test')
 const Blog = require('../models/blog')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const User = require('../models/user')
 const { Console } = require('node:console')
 
@@ -143,6 +143,22 @@ describe('User testing', () => {
     blogID = response.body._id; // Save blog ID for deletion test
   });
 
+  
+  test('Modifying a blog', async()=>{
+    const newBlog = {
+      title: 'Learn how to read books',
+      author: 'Yogendra',
+      url: '',
+      likes: "700",
+    };
+    const response = await api
+      .put(`/blogs/${blogID}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(newBlog)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+    expect(response.body.likes).toBe(newBlog.likes);
+  })
   test('Deleting a blog from a user', async () => {
     await api
       .delete(`/blogs/${blogID}`)

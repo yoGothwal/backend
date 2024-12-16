@@ -3,16 +3,19 @@ POST http://localhost:5000/users
 Content-Type: application/json
 
 {
-    "username": "yogi",
+    "username": "goty",
     "name": "Yogendra Gothwal",
     "password": "1234"
 }
+### empty db
+POST http://localhost:5000/testing/reset
+
 ###
 POST http://localhost:5000/login
 Content-Type: application/json
 
 {
-    "username": "goty2",
+    "username": "goty",
     "password":"1234"
 
 }
@@ -24,7 +27,7 @@ GET http://localhost:5000/users
 ### Add a new note
 POST http://localhost:5000/notes
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdvdHkyIiwiaWQiOiI2NzQ0MjdiMjE1ZWMyZjYyMWMxMmZhNTEiLCJpYXQiOjE3MzI1MTk5MjMsImV4cCI6MTczMjczNTkyM30.QlmHG-TRVJIRC-bUPs50iD_QOocycoU9ps_jRzEI8xo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdvdHkiLCJpZCI6IjY3NTMxZjA1OWQwODg3MmUwNGZiYTg4MSIsImlhdCI6MTczMzUwMDgxNiwiZXhwIjoxNzMzNzE2ODE2fQ.6dL0nYqqc_JrBPNQgvnHfdH8m2pcFoOco2Pet5qsBig
 
 {
   "content": "contnt 3",
@@ -33,6 +36,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imdvd
 
 ### Get all notes
 GET http://localhost:5000/notes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdvdHkiLCJpZCI6IjY3NTMxZjA1OWQwODg3MmUwNGZiYTg4MSIsImlhdCI6MTczMzUwMDgxNiwiZXhwIjoxNzMzNzE2ODE2fQ.6dL0nYqqc_JrBPNQgvnHfdH8m2pcFoOco2Pet5qsBig
+###PUT note
+PUT http://localhost:5000/notes/67531fad9d08872e04fba89e
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdvdHkiLCJpZCI6IjY3NTMxYWMzOWQwODg3MmUwNGZiYTc3NSIsImlhdCI6MTczMzQ5OTgzOCwiZXhwIjoxNzMzNzE1ODM4fQ.5jAETD7AgGRdMe4CDUS6yhkLHUoUo_qCZKUk9aySNfU
+Content-Type: application/json
+
+{
+  "content": "Updat",
+  "important": true
+}
 
 ### Get single personn
 GET http://localhost:5000/notes/1
@@ -65,14 +78,7 @@ Content-Type: application/json
 ### delete a user
 DELETE http://localhost:5000/users/674049c5c894bff0bd22eef2
 
-###PUT note
-PUT http://localhost:5000/notes/67312809c3fe6e7b0a3dffb9
-Content-Type: application/json
 
-{
-  "content": "Updatid content here",
-  "important": true
-}
 
 
 
