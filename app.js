@@ -4,15 +4,7 @@ const config = require('./utilis/config')
 const middleware = require('./utilis/middleware')
 const app = express()
 const cors = require('cors')
-const corsOptions = {
-  origin: process.env.NODE_ENV === 'production'
-    ? ['https://frontend-4-te7v.onrender.com']
-    : ['http://localhost:5173'],  // Allow localhost during development
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-};
-
-app.use(cors(corsOptions))
+app.use(cors())
 
 app.use(middleware.tokenExtractor);
 // app.use(middleware.userExtractor);
@@ -48,9 +40,7 @@ const startServer = async () => {
   }
 }
 startServer()
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+
 
 
 // Middlewares
